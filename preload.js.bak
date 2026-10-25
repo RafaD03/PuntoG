@@ -1,0 +1,9 @@
+const { contextBridge, ipcRenderer } = require('electron');
+contextBridge.exposeInMainWorld('api', {
+  open: () => ipcRenderer.invoke('file:open'),
+  write: (d, p) => ipcRenderer.invoke('file:write', d, p),
+  writeSync: (d, p) => ipcRenderer.sendSync('file:writeSync', d, p),
+  saveAs: (d, n) => ipcRenderer.invoke('file:saveAs', d, n),
+  pdf: n => ipcRenderer.invoke('pdf:export', n),
+  onMenu: cb => ipcRenderer.on('menu', (e, c) => cb(c))
+});
